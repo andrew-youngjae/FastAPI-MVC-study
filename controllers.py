@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 from models import User, Memo
 from dependencies import get_db, get_password_hash, verify_password
 from schemas import UserCreate, UserLogin, MemoCreate, MemoUpdate
@@ -9,7 +11,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 @router.post("/signup/")
-async def signup(signup_data: UserCreate, db: Session = Depends(get_db)):
+async def signup(signup_data: UserCreate, db: AsyncSession = Depends(get_db)):
     existing_user = db.query(User).filter(User.username == signup_data.username).first()
     if existing_user:
         raise HTTPException(status_code=400, detail="이미 동일 사용자 이름이 가입되어 있습니다.")

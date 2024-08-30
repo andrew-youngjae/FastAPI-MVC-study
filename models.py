@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, ForeignKey
+from sqlalchemy import MetaData, Table, Column, Integer, String, ForeignKey
 from database import Base
 
 class User(Base):
